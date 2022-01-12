@@ -1,0 +1,3 @@
+[submodule "elba_FSGAN"]
+	path = elba_FSGAN
+	url = https://github.com/shinkansan/elba_FSGAN
