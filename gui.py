@@ -1,5 +1,6 @@
 #!/bin/env/python3
 
+from ast import Or
 from PyQt5.QtCore import QDir, Qt, QUrl
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
@@ -26,13 +27,13 @@ from gui_adapter import engineAdapter
 from PIL import Image
 from multiprocessing import Process, Queue
 import multiprocessing as mp
-
+from collections import OrderedDict
 
 FD_CROP_SIZE = 224
 
 class specificImageHolder():
 
-    data = {}
+    data = OrderedDict()
 
     def __init__(self):
         pass
@@ -49,7 +50,7 @@ class specificImageHolder():
         self.remove()
         for idx, img in self.data.items():
             if type(img[1]) == type(None):
-                QMessageBox.warning(myWindow, "Can't Start", "Assertion Failed : SRC and DST Faces are not matched!")
+                QMessageBox.warning(myWindow, "Can't Start", f"Assertion Failed : {idx} SRC and DST Faces are not matched!")
                 return -1
                 #raise Exception("SRC and DST are not prepared")
             SRC_FILE_NAME = os.path.join('./elba_FSGAN/face_proc/onetoone/', f"SRC_{idx}.png")
@@ -57,6 +58,20 @@ class specificImageHolder():
             cv2.imwrite(SRC_FILE_NAME, img[0])
             cv2.imwrite(DST_FILE_NAME, img[1])
         return 1
+
+    def delItem(self, faceID):
+        if self.data.get(faceID):
+            del self.data[faceID]
+            tempData = OrderedDict()
+
+            for idx, curItem in enumerate(self.data.items()):
+                tempData.update({idx : curItem[1]})
+
+            self.data = tempData
+
+        else:
+            raise("Internal Error")
+
 
 class MyWindow(QMainWindow, UIf):
 
@@ -165,9 +180,23 @@ class MyWindow(QMainWindow, UIf):
 
 
 
+
                 
 
     def registerDST(self, row, col):
+        if col == 3: # Click to Delete
+            # for rowIdx in range(row, self.tableWidget.rowCount()-1):
+            #     prevIdx = rowIdx
+            #     newIdx = rowIdx - 1
+            #     if newIdx < 0 : raise Exception("WHAT???????")
+
+            #     self.faceHolder.data[newIdx] = self.faceHolder.data[prevIdx]
+
+            # del self.faceHolder.data[self.tableWidget.rowCount() - 1]
+            self.faceHolder.delItem(row)
+            self.tableWidget.removeRow(row)
+
+
         if col != 2:
             return
         img_name, _ = QFileDialog.getOpenFileName(self, "Select DST Image",
@@ -223,7 +252,9 @@ class MyWindow(QMainWindow, UIf):
                 print("No face in the frame!")
                 return None
         except:
-            print("No face image in frame")   
+            print("No face image in frame")  
+            QMessageBox.information(self, "No Face in frame!", "NO FACE FOUNDED") 
+            return None
 
         for face in specific_person_align_crop:
             
@@ -241,7 +272,7 @@ class MyWindow(QMainWindow, UIf):
             self.tableWidget.setCellWidget(self.tableWidget.rowCount() - 1, 0, self.tempLabel)
             self.tableWidget.setCellWidget(self.tableWidget.rowCount() - 1, 1, QLabel("➡"))
             self.tableWidget.setCellWidget(self.tableWidget.rowCount() - 1, 2, QLabel("Click to Set DST Face"))
-
+            self.tableWidget.setCellWidget(self.tableWidget.rowCount() - 1, 3, QLabel("Click to Delete"))
             self.tableWidget.resizeRowsToContents()
             self.tableWidget.resizeColumnsToContents()
 
