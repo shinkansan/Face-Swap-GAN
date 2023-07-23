@@ -122,6 +122,7 @@ class MyWindow(QMainWindow, UIf):
         mode = 'None'
 
         self.fdInst = fd_detect()
+        
         #self.fdInst.prepare(det_size=(320,320))
 
     def infer_test(self):

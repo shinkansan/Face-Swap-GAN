@@ -1,0 +1,79 @@
+input mean and std: 127.5 127.5
+find model: ./elba_FSGAN/fd_util/models/antelope/glintr100.onnx recognition
+find model: ./elba_FSGAN/fd_util/models/antelope/scrfd_10g_bnkps.onnx detection
+set det-size: (320, 320)
+set det-size: (640, 640)
+warning: det_size is already set in scrfd model, ignore
+/home/shin/o /home/shin/sample.mp4
+------------ Options -------------
+Arc_path: ./elba_FSGAN/arcface_model/arcface_checkpoint.tar
+aspect_ratio: 1.0
+batchSize: 8
+checkpoints_dir: ./checkpoints
+cluster_path: features_clustered_010.npy
+crop_size: 224
+data_type: 32
+dataroot: ./datasets/cityscapes/
+display_winsize: 512
+engine: None
+export_onnx: None
+feat_num: 3
+fineSize: 512
+fp16: False
+gpu_ids: [0]
+how_many: 50
+id_thres: 0.03
+image_size: 224
+input_nc: 3
+instance_feat: False
+isTrain: False
+label_feat: False
+label_nc: 0
+latent_size: 512
+loadSize: 1024
+load_features: False
+local_rank: 0
+max_dataset_size: inf
+model: pix2pixHD
+multispecific_dir: ./elba_FSGAN/face_proc/onetoone/
+nThreads: 2
+n_blocks_global: 6
+n_blocks_local: 3
+n_clusters: 10
+n_downsample_E: 4
+n_downsample_global: 3
+n_local_enhancers: 1
+name: people
+nef: 16
+netG: global
+ngf: 64
+niter_fix_global: 0
+no_flip: False
+no_instance: False
+no_simswaplogo: False
+norm: batch
+norm_G: spectralspadesyncbatch3x3
+ntest: inf
+onnx: None
+output_nc: 3
+output_path: ./output/
+phase: test
+pic_a_path: ./elba_FSFGAN/crop_224/gdg.jpg
+pic_b_path: ./elba_FSFGAN/crop_224/zrf.jpg
+pic_specific_path: ./crop_224/zrf.jpg
+resize_or_crop: scale_width
+results_dir: ./elba_FSFGAN/results/
+semantic_nc: 3
+serial_batches: False
+temp_path: ./elba_FSGAN/temp_results
+tf_log: False
+use_dropout: False
+use_encoded_image: True
+use_mask: True
+verbose: False
+video_path: ./elba_FSFGAN/demo_file/multi_people_1080p.mp4
+which_epoch: latest
+-------------- End ----------------
+set det-size: (640, 640)
+warning: det_size is already set in scrfd model, ignore
+./elba_FSGAN/checkpoints/people/latest_net_G.pth
